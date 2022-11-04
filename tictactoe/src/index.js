@@ -4,25 +4,40 @@ import './index.css';
 
 class Square extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: '-',
-    };
-  }
-
   render() {
     return (
-      <button className="square" onClick={() => this.setState({ value: 'X' })}>
-        {this.state.value}
+      <button 
+        className="square" 
+        onClick={() => this.props.onClick}>
+        {this.props.value}
       </button>
     );
   }
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
-    return <Square />;
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+    };
+
+  }
+
+  handleClick(i){
+    //Si es  un array, hay que copiarla, modificarla y machacar
+    const squares = JSON.parse(JSON.stringify(this.state.squares));
+    squares[i] = 'X';
+    this.setState({squares: squares});
+  }
+
+  renderSquare(i) { //Devuelve el estado de una posicion del array
+    return (
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+      />
+    );
   }
 
   render() {
