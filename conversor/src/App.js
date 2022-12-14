@@ -38,8 +38,6 @@ class App extends Component {
         <Divisa divisa={this.state.euros} /> Euros equivalen a <Divisa divisa={this.state.euros * this.state.factor} /> dólares<br />
         <button onClick={() => this.disminuir()}>-</button>
         <button onClick={() => this.aumentar()}>+</button>
-        
-
       </>
     );
 
