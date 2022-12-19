@@ -49,7 +49,7 @@ class App extends Component {
   }
 }
 
-function Botoncillo(props) { //¿¿¿¿DIFERENCIAS ENTRA FUNCTION Y COMPONENT???
+function Botoncillo(props) { 
   return (
     <Button
       color={props.col}
