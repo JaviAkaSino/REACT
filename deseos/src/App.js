@@ -1,24 +1,25 @@
 import logo from './logo.svg';
 import './App.css';
 import { Button, Form, InputGroup, Input, Row, Col, List } from 'reactstrap';
-import { Component } from 'react';
+import { Component, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ReactDOM from "react-dom";
 
-function Desirelist() {
+function Desirelist(props) {
   return (
-    <List type="unstyled">{this.deseos.map(d => <>
+    <List type="unstyled">{props.deseos.map(d => <>
       <PrintDeseo deseo={d} />
-      <Borrar deseo={d} quitar={(elemento) => this.props.quitar(elemento)} />
+      <Borrar deseo={d} quitar={(elemento) => props.quitar(elemento)} />
     </>)}
     </List>
   );
 
 }
 
-function Desire() {
+function Desire(props) {
 
   return (
-    <Form onSubmit={this.onAddDeseo}>
+    <Form onSubmit={props.onAddDeseo}>
       <Row xs="3">
         <Col></Col>
         <Col>
@@ -46,32 +47,39 @@ function Borrar(props) {
     </Button>)
 }
 
-function App() {
-  //Centralizamos deseos en componente principal
-  
-      const deseos= ["GAMBAS", "JAMÓN"];
-    
-  
 
-  //Función que añade los deseos a deseos
-  function handleAniadirDeseo(event) { //Es como un manejador de eventos
-    event.preventDefault(); //Hace que no refresque la página
-    //console.log(event.target.deseo.value);
-    let d = deseos;
-    d.push(event.target.deseo.value);
-    deseos = d;
+function useForceUpdate() {
+  let [value, setValue] = useState(true);
+  return (() => setValue(!value));
+}
+
+
+function App(props) {
+  //Centralizamos deseos en componente principal
+  const [deseos, setDeseos] = useState(["GAMBAS", "JAMÓN"]);
+
+  const quitar = (elemento) => {
+    setDeseos(deseos.filter(d => d != elemento));
   }
 
-  function quitar(elemento) {
-    let d = deseos.filter(d => d != elemento);
-    deseos = d;
+  //Esto hay que ponerlo así
+  let forceUpdate = useForceUpdate();
+
+  //Función que añade los deseos a deseos
+  const handleAniadirDeseo = (event) => { //Es como un manejador de eventos
+    event.preventDefault(); //Hace que no refresque la página
+    let d = deseos;
+    d.push(event.target.deseo.value);
+    setDeseos(d);
+
+    forceUpdate()
   }
 
   return (
     <div className="App">
       <h1>AÑADE TU DESEO</h1>
       <Desirelist deseos={deseos} quitar={(elemento) => quitar(elemento)} />
-      <Desire onAddDeseo={handleAniadirDeseo.bind(this)} />
+      <Desire onAddDeseo={handleAniadirDeseo} />
     </div>
   );
 
